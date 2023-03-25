@@ -1,10 +1,9 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
+Copyright © 2023 James Dorevski james@jamesdorevski.com
 */
 package main
 
-import "github.com/jamesdorevski/todo/cmd"
+import "github.com/jamesdorevski/libredo/cmd"
 
 func main() {
 	cmd.Execute()

@@ -1,4 +1,4 @@
-module github.com/jamesdorevski/todo
+module github.com/jamesdorevski/libredo
 
 go 1.20
 

@@ -6,6 +6,8 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
+	"text/tabwriter"
 
 	"github.com/jamesdorevski/do/todo"
 	"github.com/spf13/cobra"
@@ -21,13 +23,7 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		items, err := todo.ReadItems()
-		if err != nil {
-			log.Printf("%v", err)
-		}
-		fmt.Println(items)
-	},
+	Run: listRun,
 }
 
 func init() {
@@ -42,4 +38,17 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func listRun(cmd *cobra.Command, args []string) {
+	items, err := todo.ReadItems(datafile)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
+	for _, i := range items {
+		fmt.Fprintln(w, i.PrettyP()+"\t"+i.Text+"\t")
+	}
+	w.Flush()
 }

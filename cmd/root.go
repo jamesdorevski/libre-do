@@ -4,10 +4,14 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"log"
 	"os"
 
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 )
+
+var datafile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -38,7 +42,12 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.todo.yaml)")
+	home, err := homedir.Dir()
+	if err != nil {
+		log.Println("Unable to detect home directory. Please set data file using --datafile")
+	}
+
+	rootCmd.PersistentFlags().StringVar(&datafile, "datafile", home+string(os.PathSeparator)+"todo.json", "data file to store todos")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

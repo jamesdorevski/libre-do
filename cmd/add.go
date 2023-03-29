@@ -19,9 +19,12 @@ var addCmd = &cobra.Command{
 	Run:   addRun,
 }
 
+var priority int
+
 func init() {
 	rootCmd.AddCommand(addCmd)
 
+	addCmd.Flags().IntVarP(&priority, "priority", "p", 2, "Priority:1,2,3")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
@@ -34,16 +37,18 @@ func init() {
 }
 
 func addRun(cmd *cobra.Command, args []string) {
-	items, err := todo.ReadItems()
+	items, err := todo.ReadItems(datafile)
 	if err != nil {
 		log.Printf("%v", err)
 	}
 
 	for _, x := range args {
-		items = append(items, todo.Item{Text: x})
+		item := todo.Item{Text: x}
+		item.SetPriority(priority)
+		items = append(items, item)
 	}
 
-	if err := todo.SaveItems(items); err != nil {
+	if err := todo.SaveItems(datafile, items); err != nil {
 		fmt.Errorf("%v", err)
 	}
 }
